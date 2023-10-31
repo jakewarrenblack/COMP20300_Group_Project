@@ -35,23 +35,23 @@ public class Board {
     int currentPosition = player.getPosition();
     int newPosition = currentPosition + steps;
 
-    // 确保newPosition不超过棋盘边界
+    // Ensure that newPosition does not exceed the boundaries of the game board
     if (newPosition < 0) {
-        newPosition = 0; // 玩家不能移动到小于0的位置
+        newPosition = 0;   // Players cannot move to positions less than 0
     } else if (newPosition >= size * size) {
-        newPosition = size * size - 1; // 玩家不能移动超过棋盘的最大位置
+        newPosition = size * size - 1;   // Players cannot move beyond the maximum position on the game board
     }
 
-    // 将1D的newPosition转换为2D的newX和newY
-    int newX = newPosition / size; // 行号
-    int newY = newPosition % size; // 列号
+    // Convert 1D newPosition to 2D newX and newY
+    int newX = newPosition / size;   // Row number
+    int newY = newPosition % size;   // Column number
 
     Cell newCell = cells[newX][newY];
-    if (newCell.hasObstacle()) {  // 使用 hasObstacle() 方法，使代码更易读
+    if (newCell.hasObstacle()) {    // Use hasObstacle() method for readability
     newCell.getObstacle().applyEffect(player);
-    // 根据 applyEffect 的效果，决定是否更新玩家的位置
+    // Decide whether to update the player's position based on the effect of applyEffect
     } else {
-    // 更新玩家位置
+    // Update the player's position
     player.setPosition(newPosition);
     }
 }
