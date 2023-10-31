@@ -17,6 +17,10 @@ public class ScoreBoard {
             throw new IllegalArgumentException("Number of score values must not exceed maxEntries");
         }
 
+        if(maxEntries <= 0){
+            throw new IllegalArgumentException("Max entries must not be 0");
+        }
+
         this.playerScores.add(p);
     }
 

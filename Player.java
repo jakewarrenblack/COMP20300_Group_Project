@@ -4,10 +4,10 @@ public class Player {
     private int movesAvailable;
     private int score;
 
-    public Player(String name, int position, int movesAvailable){
+    public Player(String name){
         this.name = name;
-        this.position = position;
-        this.movesAvailable = movesAvailable;
+        this.position = 0;
+        this.movesAvailable = 0;
     }
 
     public String getName(){
