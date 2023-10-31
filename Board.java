@@ -2,7 +2,7 @@ import java.util.HashMap;
 public class Board {
     private final int size;  // Board Size eg.10*10
     private Cell[][] cells;
-    private HashMap<String, Player> playerMap;  //
+    private HashMap<String, Player> playerMap;  //  Use HashMap to store players, key is players' name
     
     public Board(int size) {
         this.size = size;
