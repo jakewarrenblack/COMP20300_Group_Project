@@ -2,14 +2,24 @@ public class Pit implements Obstacle{
     public enum Type {BOTTOMLESS, SPIKE, FIRE}
     private final Type type;
 
-    private int length;
+    // Default to 1 if any type but SPIKE
+    private int length = 1;
 
     public Pit(Type type){
         this.type = type;
+
+        if(type == Type.SPIKE){
+            this.length = (int)(Math.random() * 4 + 1);
+        }
     }
 
-    public Pit(int length){
-        if(length <= 0 || length > 5 ){
+    // To allow specifying a pit length
+    public Pit(Type type, int length){
+        if(type != Type.SPIKE){
+            throw new IllegalArgumentException("You can only set a custom length for spikes!");
+        }
+
+        if(length < 1 || length > 4 ){
             throw new IllegalArgumentException("Length must be between 1 and 5");
         }
         // Only spike pits have length
@@ -55,5 +65,23 @@ public class Pit implements Obstacle{
         }
 
         return effect;
+    }
+
+    @Override
+    public String getSymbol() {
+        String symbol = "⬛";
+
+        switch (this.type){
+            case FIRE -> symbol = "🔥";
+            case SPIKE -> symbol = "⚔";
+            case BOTTOMLESS -> symbol = "🕳";
+        }
+
+        return symbol;
+    }
+
+    @Override
+    public int getLength(){
+        return this.length;
     }
 }

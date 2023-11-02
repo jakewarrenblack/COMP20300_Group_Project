@@ -11,5 +11,9 @@ public class Main {
         System.out.println(player.getPosition());
 
         scoreBoard.addPlayerScore(player);
+
+        Board b= new Board(10);
+
+        b.printBoard();
     }
 }
