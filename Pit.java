@@ -34,9 +34,10 @@ public class Pit implements Obstacle{
 
     @Override
     public void applyEffect(Player p) {
+        int[] origin = {0,0};
         switch(this.type){
             case BOTTOMLESS: {
-                p.setPosition(0);
+                p.setPosition(origin);
                 p.setMovesAvailable(0);
                 break;
             }
@@ -73,7 +74,7 @@ public class Pit implements Obstacle{
 
         switch (this.type){
             case FIRE -> symbol = "🔥";
-            case SPIKE -> symbol = "⚔";
+            case SPIKE -> symbol = "🔱";
             case BOTTOMLESS -> symbol = "🕳";
         }
 

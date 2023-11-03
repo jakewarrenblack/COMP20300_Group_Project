@@ -1,12 +1,11 @@
 public class Player {
     private final String name;
-    private int position;
+    private int[] position = new int[2];
     private int movesAvailable;
     private int score;
 
     public Player(String name){
         this.name = name;
-        this.position = 0;
         this.movesAvailable = 0;
     }
 
@@ -14,11 +13,11 @@ public class Player {
         return this.name;
     }
 
-    public void setPosition(int position){
+    public void setPosition(int[] position){
         this.position = position;
     }
 
-    public int getPosition(){
+    public int[] getPosition(){
         return this.position;
     }
 

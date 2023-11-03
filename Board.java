@@ -4,8 +4,8 @@ import java.util.Random;
 
 public class Board {
     private final int size;  // Board Size eg.10*10
-    private Cell[][] cells;
-    private HashMap<String, Player> playerMap;  //  Use HashMap to store players, key is players' name
+    private final Cell[][] cells;
+    private final HashMap<String, Player> playerMap;  //  Use HashMap to store players, key is players' name
 
     public Board(int size) {
         this.size = size;
@@ -96,15 +96,25 @@ public class Board {
     }
 
     public void printBoard(){
-        for(Cell[] row: cells){
+        int[] playerPosition = getPlayer("Jake").getPosition();
+        for (int i = 0; i < cells.length; i++) {
+            Cell[] row = cells[i];
             System.out.println();
-            for(Cell c: row){
-                if(c.hasObstacle()){
-                    System.out.print(c.getObstacle().getSymbol());
+            for (int j = 0; j < row.length; j++) {
+                Cell c = row[j];
+
+                if(playerPosition[0] == i && playerPosition[1] == j){
+                    System.out.print("🤠");
                 }
                 else{
-                    System.out.print('⬛');
+                    if (c.hasObstacle()) {
+                        System.out.print(c.getObstacle().getSymbol());
+                    } else {
+                        System.out.print('⬛');
+                    }
                 }
+
+
             }
         }
     }
@@ -120,7 +130,7 @@ public class Board {
             throw new IllegalArgumentException("Player not found!");
         }
 
-        int currentPosition = player.getPosition();
+        int currentPosition = player.getPosition()[0];
         int newPosition = currentPosition + steps;
 
         // Ensure that newPosition does not exceed the boundaries of the game board
@@ -134,14 +144,20 @@ public class Board {
         int newX = newPosition / size;   // Row number
         int newY = newPosition % size;   // Column number
 
+        int[] newPosition2D = new int[2];
+        newPosition2D[0] = newX;
+        newPosition2D[1] = newY;
+
         Cell newCell = cells[newX][newY];
         if (newCell.hasObstacle()) {    // Use hasObstacle() method for readability
             newCell.getObstacle().applyEffect(player);
             // Decide whether to update the player's position based on the effect of applyEffect
         } else {
             // Update the player's position
-            player.setPosition(newPosition);
+            player.setPosition(newPosition2D);
         }
+
+        this.printBoard();
     }
 
     public Cell getCell(int x, int y) {
