@@ -16,6 +16,8 @@ public class Board {
         initializeCells();
         this.players = this.addPlayers();
         this.dice = dice;
+
+        this.currentPlayer = this.setInitialPlayer();
     }
 
     /**
@@ -166,7 +168,7 @@ public class Board {
     }
 
     public void printBoard(){
-        int[] playerPosition = getPlayer(0).getPosition();
+        int[] playerPosition = currentPlayer.getPosition();
         for (int i = 0; i < cells.length; i++) {
             Cell[] row = cells[i];
             System.out.println();
@@ -277,6 +279,12 @@ public class Board {
     }
 
     public Player nextPlayer(){
+        // if this function is being called for the first time, we need to set the current player
+        if(this.currentPlayer == null){
+            this.currentPlayer = this.setInitialPlayer();
+            return this.currentPlayer;
+        }
+
         int currentPlayerIndex = this.currentPlayer.getIndex();
         int nextPlayerIndex = currentPlayerIndex + 1;
 

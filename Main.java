@@ -18,20 +18,17 @@ public class Main {
         board.printBoard();
 
         // The player to go first is determined by the dice roll
-        Player currentPlayer = board.setInitialPlayer();
-
-        System.out.println("Make a move:");
+        System.out.println("\nMake a move:");
 
         while (gameState == GameState.ACTIVE) {
             int move = s.nextInt();
             s.nextLine();
 
             if (move != 0) {
-                board.movePlayer(currentPlayer.getIndex(), move);
+                // After player has made a move, the board switches to the next player
+                // if nextPlayer is being called before initial player has even been set, the initial player is returned instead of incrementing the index
+                board.movePlayer(board.nextPlayer().getIndex(), move);
             }
-
-            // After player has made a move, switch to the next player
-            currentPlayer = board.nextPlayer();
 
             System.out.println("\nMake a move:");
         }
