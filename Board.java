@@ -111,9 +111,14 @@ public class Board {
     public ArrayList<Player> addPlayers() {
         Scanner in = new Scanner(System.in);
 
-        System.out.println("How many players are there?");
+        System.out.println("How many players are there? You need at least 2 players to play.");
 
         int numPlayers = in.nextInt();
+
+        while(numPlayers < 2){
+            System.out.println("You need at least 2 players to play. Please enter a valid number of players.");
+            numPlayers = in.nextInt();
+        }
 
         for (int i = 0; i < numPlayers; i++) {
             System.out.println("What is the name of player " + (i + 1) + "?");
@@ -121,6 +126,8 @@ public class Board {
             Player player = new Player(name, i);
             this.players.add(player);
         }
+
+
 
 
         System.out.print("Welcome to the game");
