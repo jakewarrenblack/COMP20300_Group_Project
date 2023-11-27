@@ -3,20 +3,22 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
+        Scanner s = new Scanner(System.in);
         enum GameState {ACTIVE, LOST, WON};
         GameState gameState = GameState.ACTIVE;
 
-        Player player = new Player("Jake");
-        ScoreBoard scoreBoard = new ScoreBoard(new ArrayList<Player>(), 1);
+        ScoreBoard scoreBoard = new ScoreBoard(new ArrayList<Player>(), 2);
 
-        scoreBoard.addPlayerScore(player);
+        Board board = new Board(10, new Dice());
 
-        Board b= new Board(10);
-        b.addPlayer(player);
+        for(Player p: board.getPlayers()) {
+            scoreBoard.addPlayerScore(p);
+        }
 
-        b.printBoard();
+        board.printBoard();
 
-        Scanner s = new Scanner(System.in);
+        // The player to go first is determined by the dice roll
+        Player currentPlayer = board.setInitialPlayer();
 
         System.out.println("Make a move:");
 
@@ -25,8 +27,11 @@ public class Main {
             s.nextLine();
 
             if (move != 0) {
-                b.movePlayer("Jake", move);
+                board.movePlayer(currentPlayer.getIndex(), move);
             }
+
+            // After player has made a move, switch to the next player
+            currentPlayer = board.nextPlayer();
 
             System.out.println("\nMake a move:");
         }

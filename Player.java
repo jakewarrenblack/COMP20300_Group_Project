@@ -1,12 +1,14 @@
 public class Player {
+    private final int index;
     private final String name;
     private int[] position = new int[2];
     private int movesAvailable;
     private int score;
 
-    public Player(String name){
+    public Player(String name, int index){
         this.name = name;
         this.movesAvailable = 0;
+        this.index = index;
     }
 
     public String getName(){
@@ -37,4 +39,7 @@ public class Player {
         return this.score;
     }
 
+    public int getIndex(){
+        return this.index;
+    }
 }

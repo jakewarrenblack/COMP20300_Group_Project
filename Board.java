@@ -1,18 +1,81 @@
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Random;
+import java.sql.SQLOutput;
+import java.util.*;
 
 public class Board {
+    private final Dice dice;
     private final int size;  // Board Size eg.10*10
     private final Cell[][] cells;
-    private final HashMap<String, Player> playerMap;  //  Use HashMap to store players, key is players' name
 
-    public Board(int size) {
+    private ArrayList<Player> players = new ArrayList<>();
+
+    private Player currentPlayer;
+
+    public Board(int size, Dice dice) {
         this.size = size;
         this.cells = new Cell[size][size];  // Stores all the cells on the board
         initializeCells();
-        this.playerMap = new HashMap<>();
+        this.players = this.addPlayers();
+        this.dice = dice;
     }
+
+    /**
+     * The player to go first is determined by the dice roll
+     * Simply roll the dice twice, and compare the values
+     * @return Player
+     */
+    public Player setInitialPlayer(){
+
+        int playerOneDiceValue = this.dice.roll();
+        int playerTwoDiceValue = this.dice.roll();
+
+        // If the two values are the same, re-roll
+        while(playerOneDiceValue == playerTwoDiceValue){
+            playerOneDiceValue = this.dice.roll();
+            playerTwoDiceValue = this.dice.roll();
+        }
+
+        // if leftDie has a greater value, player 0 starts, otherwise, player 1 starts
+        System.out.println("\n" + this.players.get(0).getName()+" has rolled "+playerOneDiceValue+", "+this.players.get(1).getName()+" has rolled "+playerTwoDiceValue + "\n");
+
+        // if leftDie has a greater value, player 0 starts, otherwise, player 1 starts
+        this.currentPlayer = this.players.get(playerOneDiceValue > playerTwoDiceValue ? 0 : 1);
+
+        System.out.println(this.currentPlayer.getName()+" will go first");
+        return this.currentPlayer;
+    }
+
+    public ArrayList<Player> addPlayers (){
+        Scanner in = new Scanner(System.in);
+
+        System.out.println("How many players are there?");
+
+        int numPlayers = in.nextInt();
+
+        for (int i = 0; i < numPlayers; i++) {
+            System.out.println("What is the name of player " + (i+1) + "?");
+            String name = in.next();
+            Player player = new Player(name, i);
+            this.players.add(player);
+        }
+
+
+        System.out.print("Welcome to the game");
+
+        // When it gets to the last player, print "and" before their name, instead of a comma
+        for(int i=0; i<this.players.size(); i++){
+            if(i == this.players.size() - 1){
+                System.out.print(" and " + this.players.get(i).getName());
+            }
+            else{
+                System.out.print(", " + this.players.get(i).getName());
+            }
+        }
+
+
+
+        return players;
+    }
+
 
     private void initializeCells() {
         for (int i = 0; i < size; i++) {
@@ -96,7 +159,7 @@ public class Board {
     }
 
     public void printBoard(){
-        int[] playerPosition = getPlayer("Jake").getPosition();
+        int[] playerPosition = getPlayer(0).getPosition();
         for (int i = 0; i < cells.length; i++) {
             Cell[] row = cells[i];
             System.out.println();
@@ -121,11 +184,12 @@ public class Board {
 
 
     public void addPlayer(Player player) {
-        playerMap.put(player.getName(), player);
+        players.add(player);
     }
 
-    public void movePlayer(String playerName, int steps) {
-        Player player = playerMap.get(playerName);
+
+    public void movePlayer(int playerNumber, int steps) {
+        Player player = players.get(playerNumber);
         if (player == null) {
             throw new IllegalArgumentException("Player not found!");
         }
@@ -164,12 +228,12 @@ public class Board {
         return cells[x][y];
     }
 
-    public Player getPlayer(String playerName) {
-        return playerMap.get(playerName);
+    public Player getPlayer(int playerNumber) {
+        return players.get(playerNumber);
     }
 
     public void removePlayer(String playerName) {
-        playerMap.remove(playerName);
+        players.remove(playerName);
     }
 
     private class Cell {
@@ -202,6 +266,27 @@ public class Board {
             this.obstacle = obstacle;
         }
     }
+
+    public ArrayList<Player> getPlayers() {
+        return players;
+    }
+
+    public Player nextPlayer(){
+        int currentPlayerIndex = this.currentPlayer.getIndex();
+        int nextPlayerIndex = currentPlayerIndex + 1;
+
+        // If we're at the end of the players array, loop back to the start
+        if(nextPlayerIndex >= this.players.size()){
+            nextPlayerIndex = 0;
+        }
+
+        this.currentPlayer = this.players.get(nextPlayerIndex);
+
+        System.out.println("\n" + this.currentPlayer.getName() + "'s turn");
+
+        return this.currentPlayer;
+    }
+
 }
 
     
