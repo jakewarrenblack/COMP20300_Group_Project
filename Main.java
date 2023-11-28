@@ -34,14 +34,16 @@ public class Main {
             int move = dice.roll();
             System.out.println("Rolled: " + move);
 
-            // Print the current scores
-            scoreBoard.printScores();
+
 
             if (move != 0) {
                 // After player has made a move, the board switches to the next player
                 // if nextPlayer is being called before initial player has even been set, the initial player is returned instead of incrementing the index
                 board.movePlayer(board.nextPlayer().getIndex(), move, scoreBoard);
             }
+
+            // Print the current scores
+            scoreBoard.printScores();
 
             System.out.println("\nMake a move:");
 
