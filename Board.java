@@ -19,7 +19,7 @@ public class Board {
         initializeCells();
         this.dice = dice;
 
-        this.players = new ArrayList<>();
+        this.players = addPlayers();
 
         List<int[]> coordinatesList = new ArrayList<>();
 
