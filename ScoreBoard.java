@@ -1,30 +1,69 @@
 import java.util.ArrayList;
-public class ScoreBoard {
-    private final ArrayList<Player> playerScores;
-    private final int maxEntries;
 
-    public ScoreBoard(ArrayList<Player> playerScores, int maxEntries){
-        if(playerScores.size() > maxEntries){
-            throw new IllegalArgumentException("Number of score values must not exceed maxEntries");
+public class ScoreBoard {
+    private final ArrayList<Player> playerScores;  // List to store player scores
+    private final int maxEntries;  // Maximum number of entries to display on the scoreboard
+
+    /**
+     * Constructor to initialize the scoreboard
+     *
+     */
+    public ScoreBoard(ArrayList<Player> playerScores, int maxEntries) {
+        if (playerScores.size() > maxEntries) {
+            throw new IllegalArgumentException("Number of scores must not exceed the maximum number of entries");
         }
-        // To determine the number of entries displayed, e.g. top 10 or top 5 scores.
         this.maxEntries = maxEntries;
         this.playerScores = playerScores;
     }
 
-    public void addPlayerScore(Player p){
-        if(this.playerScores.size() + 1 > this.maxEntries){
-            throw new IllegalArgumentException("Number of score values must not exceed maxEntries");
+    /**
+     * Add a player's score to the scoreboard
+     *
+     */
+    public void addPlayerScore(Player p) {
+        if (this.playerScores.size() + 1 > this.maxEntries) {
+            throw new IllegalArgumentException("Number of scores must not exceed the maximum number of entries");
         }
 
-        if(maxEntries <= 0){
-            throw new IllegalArgumentException("Max entries must not be 0");
+        if (maxEntries <= 0) {
+            throw new IllegalArgumentException("Maximum number of entries must not be zero");
         }
 
         this.playerScores.add(p);
     }
 
-    public ArrayList<Player> getPlayerScores(){
+    /**
+     * Get the list of player scores stored in the scoreboard
+     */
+    public ArrayList<Player> getPlayerScores() {
         return this.playerScores;
+    }
+
+    public void addScore(String playerName, int scoreToAdd) {
+        for (Player player : playerScores) {
+            if (player.getName().equals(playerName)) {
+                player.setScore(player.getScore() + scoreToAdd);
+                break;
+            }
+        }
+    }
+
+    /**
+     * Deduct a player's score
+     */
+    public void deductScore(String playerName, int scoreToDeduct) {
+        for (Player player : playerScores) {
+            if (player.getName().equals(playerName)) {
+                player.setScore(player.getScore() - scoreToDeduct);
+                break;
+            }
+        }
+    }
+
+    public void printScores() {
+        System.out.println("Current Scores:");
+        for (Player player : playerScores) {
+            System.out.println(player.getName() + ": " + player.getScore() + " points");
+        }
     }
 }
