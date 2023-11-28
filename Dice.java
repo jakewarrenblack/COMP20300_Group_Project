@@ -6,8 +6,7 @@ public class Dice {
     }
 
     public int roll(){
-        // Set the dice face to some random value between 1 and 9 inclusive
-        this.value = (int)(Math.random() * 9 + 1);
+        this.value = (int)(Math.random() * 9 + 1);  // Set the dice face to some random value between 1 and 9 inclusive
         return this.value;
     }
 
