@@ -3,34 +3,43 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        Scanner s = new Scanner(System.in);
         enum GameState {ACTIVE, LOST, WON};
-        GameState gameState = GameState.ACTIVE;
+        GameState gameState = GameState.ACTIVE; // Initialize game state to active
 
-        ScoreBoard scoreBoard = new ScoreBoard(new ArrayList<Player>(), 2);
+        // Create player object and scoreboard
+        Player player = new Player("Jake");
+        ScoreBoard scoreBoard = new ScoreBoard(new ArrayList<Player>(), 1);
+        scoreBoard.addPlayerScore(player);
 
-        Board board = new Board(10, new Dice());
+        Board b = new Board(10);
+        b.addPlayer(player); // Add player to the game board
 
-        for(Player p: board.getPlayers()) {
-            scoreBoard.addPlayerScore(p);
-        }
+        b.printBoard(); // Print the initial game board
 
-        board.printBoard();
+        Dice dice = new Dice();
 
-        // The player to go first is determined by the dice roll
-        System.out.println("\nMake a move:");
+        System.out.println();
+        System.out.println("Press any key to roll the dice, enter 'exit' to quit the game");
+
+        Scanner s = new Scanner(System.in);
 
         while (gameState == GameState.ACTIVE) {
-            int move = s.nextInt();
-            s.nextLine();
 
-            if (move != 0) {
-                // After player has made a move, the board switches to the next player
-                // if nextPlayer is being called before initial player has even been set, the initial player is returned instead of incrementing the index
-                board.movePlayer(board.nextPlayer().getIndex(), move);
+            String input = s.nextLine();
+
+            if ("exit".equalsIgnoreCase(input)) {
+                break;
             }
 
-            System.out.println("\nMake a move:");
+            int move = dice.roll();
+            System.out.println("Rolled: " + move);
+
+            b.movePlayer("Jake", move, scoreBoard);
+
+            // Print the current scores
+            scoreBoard.printScores();
         }
+
+        s.close();
     }
 }
