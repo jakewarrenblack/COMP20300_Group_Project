@@ -1,17 +1,26 @@
 import java.util.*;
 
-public class Board {
-    private final int size;  // Size of the board
-    private final Cell[][] cells;  // Stores all cells on the board
-    private final HashMap<String, Player> playerMap;  // Uses HashMap to store players, with the player's name as the key
-    private static List<int[]> Contrast;
-    private static HashMap<String, Integer> CONTRAST_MAP=new HashMap<>();
 
-    public Board(int size) {
+public class Board {
+    private final Dice dice;
+    private final int size;  // Board Size eg.10*10
+    private final Cell[][] cells;
+
+    private static List<int[]> Contrast;
+    private static HashMap<String, Integer> CONTRAST_MAP = new HashMap<>();
+
+    private ArrayList<Player> players = new ArrayList<>();
+
+    private Player currentPlayer;
+
+    public Board(int size, Dice dice) {
         this.size = size;
         this.cells = new Cell[size][size];
         initializeCells();
-        this.playerMap = new HashMap<>();
+        this.dice = dice;
+
+
+        this.players = addPlayers();
 
         List<int[]> coordinatesList = new ArrayList<>();
 
@@ -31,7 +40,7 @@ public class Board {
                 a[0] = top;
                 a[1] = i;
                 coordinatesList.add(a);
-                CONTRAST_MAP.put(Arrays.toString(a),value);
+                CONTRAST_MAP.put(Arrays.toString(a), value);
                 value++;
             }
             top++;
@@ -42,7 +51,7 @@ public class Board {
                 a[0] = i;
                 a[1] = right;
                 coordinatesList.add(a);
-                CONTRAST_MAP.put(Arrays.toString(a),value);
+                CONTRAST_MAP.put(Arrays.toString(a), value);
                 value++;
             }
             right--;
@@ -53,7 +62,7 @@ public class Board {
                 a[0] = bottom;
                 a[1] = i;
                 coordinatesList.add(a);
-                CONTRAST_MAP.put(Arrays.toString(a),value);
+                CONTRAST_MAP.put(Arrays.toString(a), value);
                 value++;
             }
             bottom--;
@@ -64,15 +73,83 @@ public class Board {
                 a[0] = i;
                 a[1] = left;
                 coordinatesList.add(a);
-                CONTRAST_MAP.put(Arrays.toString(a),value);
+                CONTRAST_MAP.put(Arrays.toString(a), value);
                 value++;
             }
             left++;
         }
         this.Contrast = Collections.unmodifiableList(coordinatesList);
+
+        this.currentPlayer = this.setInitialPlayer();
+
     }
 
-    // Initialize the board (2D array)
+
+    /**
+     * The player to go first is determined by the dice roll
+     * Simply roll the dice twice, and compare the values
+     *
+     * @return Player
+     */
+    public Player setInitialPlayer() {
+
+        int playerOneDiceValue = this.dice.roll();
+        int playerTwoDiceValue = this.dice.roll();
+
+        // If the two values are the same, re-roll
+        while (playerOneDiceValue == playerTwoDiceValue) {
+            playerOneDiceValue = this.dice.roll();
+            playerTwoDiceValue = this.dice.roll();
+        }
+
+        // if leftDie has a greater value, player 0 starts, otherwise, player 1 starts
+        System.out.println("\n" + this.players.get(0).getName() + " has rolled " + playerOneDiceValue + ", " + this.players.get(1).getName() + " has rolled " + playerTwoDiceValue + "\n");
+
+        // if leftDie has a greater value, player 0 starts, otherwise, player 1 starts
+        this.currentPlayer = this.players.get(playerOneDiceValue > playerTwoDiceValue ? 0 : 1);
+
+        System.out.println(this.currentPlayer.getName() + " will go first");
+        return this.currentPlayer;
+    }
+
+    public ArrayList<Player> addPlayers() {
+        Scanner in = new Scanner(System.in);
+
+        System.out.println("How many players are there? You need at least 2 players to play.");
+
+        int numPlayers = in.nextInt();
+
+        while(numPlayers < 2){
+            System.out.println("You need at least 2 players to play. Please enter a valid number of players.");
+            numPlayers = in.nextInt();
+        }
+
+        for (int i = 0; i < numPlayers; i++) {
+            System.out.println("What is the name of player " + (i + 1) + "?");
+            String name = in.next();
+            Player player = new Player(name, i);
+            this.players.add(player);
+        }
+
+
+
+
+        System.out.print("Welcome to the game");
+
+        // When it gets to the last player, print "and" before their name, instead of a comma
+        for (int i = 0; i < this.players.size(); i++) {
+            if (i == this.players.size() - 1) {
+                System.out.print(" and " + this.players.get(i).getName());
+            } else {
+                System.out.print(", " + this.players.get(i).getName());
+            }
+        }
+
+
+        return players;
+    }
+
+
     private void initializeCells() {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
@@ -114,7 +191,6 @@ public class Board {
     }
 
 
-
     public void handleSpikePit(Cell c, Pit p) {
         c.setObstacle(p);
 
@@ -148,8 +224,10 @@ public class Board {
         }
     }
 
-    public void printBoard() {
-        int[] playerPosition = getPlayer("Jake").getPosition();
+
+    public void printBoard(){
+        int[] playerPosition = currentPlayer.getPosition();
+
         for (int i = 0; i < cells.length; i++) {
             Cell[] row = cells[i];
             System.out.println();
@@ -170,24 +248,28 @@ public class Board {
     }
 
     public void addPlayer(Player player) {
-        playerMap.put(player.getName(), player);
+        players.add(player);
     }
 
-    public void movePlayer(String playerName, int steps, ScoreBoard scoreBoard) {
-        Player player = playerMap.get(playerName);
+
+    public void movePlayer(int playerNumber, int steps, ScoreBoard scoreBoard) {
+        Player player = players.get(playerNumber);
+
         if (player == null) {
             throw new IllegalArgumentException("Player not found!");
         }
         System.out.println("Y:" + player.getPosition()[0] + "    x:" + player.getPosition()[1]);
+
         int[] a = new int[2];
         a[0] = player.getPosition()[0];
         a[1] = player.getPosition()[1];
         Integer integer = CONTRAST_MAP.get(Arrays.toString(a));
         System.out.println(integer);
-        int currentPosition = integer + steps - 1;
-        int newPosition = currentPosition;
+
+        int newPosition = integer + steps - 1;
+
         if (newPosition >= 99) {
-            System.out.println("Game over! " + playerName + " wins");
+            System.out.println("Game over! " + currentPlayer.getName() + " wins");
             newPosition = 99;
         }
         // Convert 1D newPosition to 2D newX and newY
@@ -199,17 +281,24 @@ public class Board {
         newPosition2D[1] = newY;
 
         Cell newCell = cells[newX][newY];
-        if (newCell.hasObstacle()) {
-            newCell.getObstacle().applyEffect(player, size);
+
+        if (newCell.hasObstacle()) {    // Use hasObstacle() method for readability
             // Decide whether to update the player's position based on applyEffect's outcome
             if ((player.getScore() - 3) < 0) {
-                scoreBoard.deductScore(playerName, player.getScore());
+                scoreBoard.deductScore(currentPlayer.getName(), player.getScore());
             }
-            scoreBoard.deductScore(playerName, 3);
+            scoreBoard.deductScore(currentPlayer.getName(), 3);
+
+            System.out.println("Player " + playerNumber + " has encountered a " + newCell.getObstacle().getType().toString() + " pit!");
+            System.out.println("Effect:" + newCell.getObstacle().printEffect());
+
+            newCell.getObstacle().applyEffect(player, size);
+            // Decide whether to update the player's position based on the effect of applyEffect
+
         } else {
             // Update the player's position
             player.setPosition(newPosition2D);
-            scoreBoard.addScore(playerName, steps);
+            scoreBoard.addScore(currentPlayer.getName(), steps);
         }
 
         this.printBoard();
@@ -220,12 +309,12 @@ public class Board {
         return cells[x][y];
     }
 
-    public Player getPlayer(String playerName) {
-        return playerMap.get(playerName);
+    public Player getPlayer(int playerNumber) {
+        return players.get(playerNumber);
     }
 
     public void removePlayer(String playerName) {
-        playerMap.remove(playerName);
+        players.remove(playerName);
     }
 
     private class Cell {
@@ -259,6 +348,33 @@ public class Board {
         }
     }
 
-}
 
-    
+    public ArrayList<Player> getPlayers() {
+        return players;
+    }
+
+
+    public Player nextPlayer(){
+        // if this function is being called for the first time, we need to set the current player
+        if(this.currentPlayer == null){
+            this.currentPlayer = this.setInitialPlayer();
+            return this.currentPlayer;
+        }
+
+
+        int currentPlayerIndex = this.currentPlayer.getIndex();
+        int nextPlayerIndex = currentPlayerIndex + 1;
+
+        // If we're at the end of the players array, loop back to the start
+        if (nextPlayerIndex >= this.players.size()) {
+            nextPlayerIndex = 0;
+        }
+
+        this.currentPlayer = this.players.get(nextPlayerIndex);
+
+        System.out.println("\n" + this.currentPlayer.getName() + "'s turn");
+
+        return this.currentPlayer;
+    }
+
+}

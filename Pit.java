@@ -49,13 +49,13 @@ public class Pit implements Obstacle {
      * Modify player's status according to the obstacle type
      */
     @Override
+
     public void applyEffect(Player p, int size) {
-        int[] origin = {0, 0};
+        int[] origin = {0,0};
         switch (this.type) {
             case BOTTOMLESS: {
                 p.setPosition(origin);
                 p.setMovesAvailable(0);
-                break;
             }
             case SPIKE: {
                 p.setMovesAvailable(p.getMovesAvailable() - this.length);
