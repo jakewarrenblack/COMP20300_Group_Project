@@ -35,17 +35,16 @@ public class Pit implements Obstacle{
     @Override
     public void applyEffect(Player p) {
         int[] origin = {0,0};
-        switch(this.type){
-            case BOTTOMLESS: {
+        switch (this.type) {
+            case BOTTOMLESS -> {
                 p.setPosition(origin);
                 p.setMovesAvailable(0);
-                break;
             }
-            case SPIKE: {
-                p.setMovesAvailable(p.getMovesAvailable()-this.length);
+            case SPIKE -> {
+                p.setMovesAvailable(p.getMovesAvailable() - this.length);
             }
-            case FIRE: {
-                p.setMovesAvailable(p.getMovesAvailable()-1);
+            case FIRE -> {
+                p.setMovesAvailable(p.getMovesAvailable() - 1);
             }
         }
     }

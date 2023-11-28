@@ -5,5 +5,7 @@ public interface Obstacle {
 
     String getSymbol();
 
+    Pit.Type getType();
+
     int getLength();
 }

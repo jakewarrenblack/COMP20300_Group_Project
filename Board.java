@@ -221,6 +221,9 @@ public class Board {
 
         Cell newCell = cells[newX][newY];
         if (newCell.hasObstacle()) {    // Use hasObstacle() method for readability
+            System.out.println("Player " + playerNumber + " has encountered a " + newCell.getObstacle().getType().toString() + " pit!");
+            System.out.println("Effect:" + newCell.getObstacle().printEffect());
+
             newCell.getObstacle().applyEffect(player);
             // Decide whether to update the player's position based on the effect of applyEffect
         } else {
