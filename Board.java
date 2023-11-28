@@ -259,11 +259,13 @@ public class Board {
             throw new IllegalArgumentException("Player not found!");
         }
         System.out.println("Y:" + player.getPosition()[0] + "    x:" + player.getPosition()[1]);
+
         int[] a = new int[2];
         a[0] = player.getPosition()[0];
         a[1] = player.getPosition()[1];
         Integer integer = CONTRAST_MAP.get(Arrays.toString(a));
         System.out.println(integer);
+
         int newPosition = integer + steps - 1;
 
         if (newPosition >= 99) {
@@ -279,13 +281,20 @@ public class Board {
         newPosition2D[1] = newY;
 
         Cell newCell = cells[newX][newY];
-        if (newCell.hasObstacle()) {
-            newCell.getObstacle().applyEffect(player, size);
+
+        if (newCell.hasObstacle()) {    // Use hasObstacle() method for readability
             // Decide whether to update the player's position based on applyEffect's outcome
             if ((player.getScore() - 3) < 0) {
                 scoreBoard.deductScore(currentPlayer.getName(), player.getScore());
             }
             scoreBoard.deductScore(currentPlayer.getName(), 3);
+
+            System.out.println("Player " + playerNumber + " has encountered a " + newCell.getObstacle().getType().toString() + " pit!");
+            System.out.println("Effect:" + newCell.getObstacle().printEffect());
+
+            newCell.getObstacle().applyEffect(player, size);
+            // Decide whether to update the player's position based on the effect of applyEffect
+
         } else {
             // Update the player's position
             player.setPosition(newPosition2D);
