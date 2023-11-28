@@ -1,87 +1,117 @@
-public class Pit implements Obstacle{
-    public enum Type {BOTTOMLESS, SPIKE, FIRE}
+import java.util.Random;
+
+public class Pit implements Obstacle {
+    public enum Type {BOTTOMLESS, SPIKE, FIRE, PORTAL}
     private final Type type;
 
-    // Default to 1 if any type but SPIKE
+    // If it's not of spike type, default length is 1
     private int length = 1;
 
-    public Pit(Type type){
+    /**
+     * Constructor to initialize the obstacle based on type
+     * If it's of spike type, set length randomly
+     */
+    public Pit(Type type) {
         this.type = type;
 
-        if(type == Type.SPIKE){
-            this.length = (int)(Math.random() * 4 + 1);
+        if (type == Type.SPIKE) {
+            this.length = (int) (Math.random() * 4 + 1);  // If it's of spike type, set length randomly
         }
     }
 
-    // To allow specifying a pit length
-    public Pit(Type type, int length){
-        if(type != Type.SPIKE){
-            throw new IllegalArgumentException("You can only set a custom length for spikes!");
+    /**
+     * Constructor allowing specification of obstacle length
+     * Only spike type can have a custom length
+     */
+    public Pit(Type type, int length) {
+        if (type != Type.SPIKE) {
+            throw new IllegalArgumentException("Custom length can only be set for spike type!");
         }
 
-        if(length < 1 || length > 4 ){
+        if (length < 1 || length > 4) {
             throw new IllegalArgumentException("Length must be between 1 and 5");
         }
-        // Only spike pits have length
+        // Only spike type can have a length
         this.type = Type.SPIKE;
 
         this.length = length;
     }
 
-    public Type getType(){
-        return this.type;
+    /**
+     * Get the type of the obstacle
+     */
+    public Type getType() {
+        return this.type;  // Return obstacle type
     }
 
+    /**
+     * Apply obstacle effect to the player
+     * Modify player's status according to the obstacle type
+     */
     @Override
-    public void applyEffect(Player p) {
-        int[] origin = {0,0};
+    public void applyEffect(Player p, int size) {
+        int[] origin = {0, 0};
         switch (this.type) {
-            case BOTTOMLESS -> {
+            case BOTTOMLESS: {
                 p.setPosition(origin);
                 p.setMovesAvailable(0);
+                break;
             }
-            case SPIKE -> {
+            case SPIKE: {
                 p.setMovesAvailable(p.getMovesAvailable() - this.length);
+                break;
             }
-            case FIRE -> {
+            case FIRE: {
                 p.setMovesAvailable(p.getMovesAvailable() - 1);
+                break;
+            }
+            case PORTAL: {
+                Random random = new Random();
+                p.setPosition(new int[]{random.nextInt(size), random.nextInt(size)});
+                break;
             }
         }
     }
 
-
     /**
-     * Assuming this will be useful in the future.
-     * @return String
+     * Get a description of the obstacle effect
      */
     @Override
     public String printEffect() {
         String effect = "";
 
-        switch(this.type){
-            case FIRE -> effect = "Causes the player to miss a turn!";
-            case SPIKE -> effect = "Consumes " + this.length + " tiles, which must be jumped over!";
-            case BOTTOMLESS -> effect = "Causes the player to return to the start!";
+        switch (this.type) {
+            case FIRE -> effect = "Causes player to miss a turn!";
+            case SPIKE -> effect = "Consumes " + this.length + " squares, must skip!";
+            case BOTTOMLESS -> effect = "Sends player back to start!";
+            case PORTAL -> effect = "Teleports player to another location!";
         }
 
-        return effect;
+        return effect;  // Return description string
     }
 
+    /**
+     * Get the symbol representation of the obstacle
+     */
     @Override
     public String getSymbol() {
         String symbol = "⬛";
 
-        switch (this.type){
+        switch (this.type) {
             case FIRE -> symbol = "🔥";
             case SPIKE -> symbol = "🔱";
             case BOTTOMLESS -> symbol = "🕳";
+            case PORTAL -> symbol = "🌀";
         }
 
         return symbol;
     }
 
+    /**
+     * Get the length of spike obstacle
+     */
     @Override
-    public int getLength(){
+    public int getLength() {
         return this.length;
     }
 }
