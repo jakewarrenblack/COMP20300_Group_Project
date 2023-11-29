@@ -1,8 +1,33 @@
+package com.example.obstaclecourse;
+
+import com.example.obstaclecourse.Models.Board;
+import com.example.obstaclecourse.Models.Dice;
+import com.example.obstaclecourse.Models.Player;
+import com.example.obstaclecourse.Models.ScoreBoard;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Main {
+public class ObstacleCourse extends Application {
+    @Override
+    public void start(Stage stage) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(ObstacleCourse.class.getResource("hello-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setTitle("Obstacle Course");
+        stage.setScene(scene);
+
+        stage.setResizable(false);
+        stage.show();
+    }
+
     public static void main(String[] args) {
+        launch();
+
         Scanner s = new Scanner(System.in);
         enum GameState {ACTIVE, LOST, WON};
         GameState gameState = GameState.ACTIVE; // Initialize game state to active

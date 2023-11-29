@@ -1,3 +1,5 @@
+package com.example.obstaclecourse.Models;
+
 public class Dice {
     private int value;
 

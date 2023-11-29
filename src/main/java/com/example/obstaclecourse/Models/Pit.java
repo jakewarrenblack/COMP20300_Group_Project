@@ -1,3 +1,5 @@
+package com.example.obstaclecourse.Models;
+
 import java.util.Random;
 
 public class Pit implements Obstacle {

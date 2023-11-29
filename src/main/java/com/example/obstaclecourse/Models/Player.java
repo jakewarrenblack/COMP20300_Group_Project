@@ -1,3 +1,5 @@
+package com.example.obstaclecourse.Models;
+
 public class Player {
     private final int index;
     private final String name;
