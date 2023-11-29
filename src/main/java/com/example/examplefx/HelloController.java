@@ -2,6 +2,7 @@ package com.example.examplefx;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -20,6 +21,9 @@ public class HelloController {
 
     @FXML
     private TextArea textArea;
+
+
+
 
 
     @FXML
@@ -44,5 +48,10 @@ public class HelloController {
         // We can access the text field and text area using the variables we defined above
         // We can get the text from the text field and set it as the text in the text area
         textArea.setText(textField.getText());
+    }
+
+    public void onClearButtonClick(ActionEvent actionEvent) {
+        textArea.setText("");
+        textField.setText("");
     }
 }
