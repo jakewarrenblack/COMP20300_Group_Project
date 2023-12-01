@@ -1,6 +1,7 @@
 module com.example.obstaclecourse {
     requires javafx.controls;
     requires javafx.fxml;
+    requires java.desktop;
 
 
     opens com.example.obstaclecourse to javafx.fxml;

@@ -24,7 +24,7 @@
         </VBox.margin>
     </ImageView>
     <Button fx:id="rollBtn" mnemonicParsing="false" onAction="#roll" text="ROLL" />
-    <Text fx:id="diceValues" strokeType="OUTSIDE" strokeWidth="0.0" text="2, 3">
+    <Text fx:id="diceValues" strokeType="OUTSIDE" strokeWidth="0.0" text="">
         <VBox.margin>
             <Insets bottom="5.0" top="5.0" />
         </VBox.margin>

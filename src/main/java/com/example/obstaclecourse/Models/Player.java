@@ -1,5 +1,8 @@
 package com.example.obstaclecourse.Models;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+
 public class Player {
     private final int index;
     private final String name;
@@ -7,9 +10,14 @@ public class Player {
     private int movesAvailable;  // Remaining moves available for the player
     private int score;
 
+    // need to keep track of when the player's position changes, so we can update the UI
+    // same as we do with the dice value, we'll use a property change listener
+    private final PropertyChangeSupport support;
+
+
 
     public Player(String name, int index){
-
+        this.support = new PropertyChangeSupport(this);
         this.name = name;
         this.movesAvailable = 0;
         this.index = index;
@@ -21,7 +29,13 @@ public class Player {
     }
     
     public void setPosition(int[] position){
+        System.out.println("Updating player position. Property change will be fired.");
+        // keep a reference to the original, before it's changed
+        int[] oldPosition = this.position;
+
         this.position = position;
+
+        this.support.firePropertyChange("playerPosition", oldPosition, position);
     }
 
 
@@ -52,6 +66,14 @@ public class Player {
 
     public int getIndex(){
         return this.index;
+    }
+
+    public void addPropertyChangeListener(PropertyChangeListener pcl) {
+        support.addPropertyChangeListener(pcl);
+    }
+
+    public void removePropertyChangeListener(PropertyChangeListener pcl) {
+        support.removePropertyChangeListener(pcl);
     }
 
 }

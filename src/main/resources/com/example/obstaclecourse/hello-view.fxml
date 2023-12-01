@@ -421,12 +421,10 @@
       </GridPane>
       <Region prefHeight="21.0" prefWidth="430.0" style="-fx-background-color: black;" />
       <VBox alignment="TOP_CENTER" style="-fx-background-color: white; -fx-border-width: 5px; -fx-border-color: black;">
-         <children>
-            <fx:include fx:id="diceComponent" source="dice-view.fxml" />
-         </children>
          <opaqueInsets>
-            <Insets />
+            <Insets/>
          </opaqueInsets>
+         <fx:include fx:id="diceComponent" source="dice-view.fxml"/>
       </VBox>
    </children>
    <opaqueInsets>

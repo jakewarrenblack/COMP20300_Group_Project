@@ -15,14 +15,12 @@ public class Board {
 
     private Player currentPlayer;
 
-    public Board(int size, Dice dice) {
+    public Board(int size, Dice dice, ArrayList<Player> players) {
         this.size = size;
         this.cells = new Cell[size][size];
         initializeCells();
         this.dice = dice;
-
-
-        this.players = addPlayers();
+        this.players = players;
 
         List<int[]> coordinatesList = new ArrayList<>();
 
@@ -114,42 +112,7 @@ public class Board {
         return this.currentPlayer;
     }
 
-    public ArrayList<Player> addPlayers() {
-        Scanner in = new Scanner(System.in);
 
-        System.out.println("How many players are there? You need at least 2 players to play.");
-
-        int numPlayers = in.nextInt();
-
-        while(numPlayers < 2){
-            System.out.println("You need at least 2 players to play. Please enter a valid number of players.");
-            numPlayers = in.nextInt();
-        }
-
-        for (int i = 0; i < numPlayers; i++) {
-            System.out.println("What is the name of player " + (i + 1) + "?");
-            String name = in.next();
-            Player player = new Player(name, i);
-            this.players.add(player);
-        }
-
-
-
-
-        System.out.print("Welcome to the game");
-
-        // When it gets to the last player, print "and" before their name, instead of a comma
-        for (int i = 0; i < this.players.size(); i++) {
-            if (i == this.players.size() - 1) {
-                System.out.print(" and " + this.players.get(i).getName());
-            } else {
-                System.out.print(", " + this.players.get(i).getName());
-            }
-        }
-
-
-        return players;
-    }
 
 
     private void initializeCells() {
@@ -254,7 +217,7 @@ public class Board {
     }
 
 
-    public void movePlayer(int playerNumber, int steps, ScoreBoard scoreBoard) {
+    public Player movePlayer(int playerNumber, int steps, ScoreBoard scoreBoard) {
         Player player = players.get(playerNumber);
 
         if (player == null) {
@@ -304,6 +267,8 @@ public class Board {
         }
 
         this.printBoard();
+
+        return player;
     }
 
 
