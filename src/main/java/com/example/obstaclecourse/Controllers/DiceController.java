@@ -1,9 +1,8 @@
 package com.example.obstaclecourse.Controllers;
 import com.example.obstaclecourse.Models.Dice;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.text.Text;
-public class diceController {
+public class DiceController {
     Dice dice = new Dice();
 
     @FXML

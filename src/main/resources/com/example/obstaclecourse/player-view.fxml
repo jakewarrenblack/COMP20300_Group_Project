@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.GridPane?>
+
+<ImageView fx:id="player" fitHeight="65.0" fitWidth="54.0" layoutX="0.0" layoutY="9.0" pickOnBounds="true" GridPane.columnIndex="0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.obstaclecourse.Controllers.PlayerController">
+    <Image url="@images/knight-single.png" />
+</ImageView>

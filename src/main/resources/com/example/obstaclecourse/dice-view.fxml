@@ -9,7 +9,7 @@
 
 <!-- Root element -->
 
-<VBox id="AnchorPane" alignment="TOP_CENTER" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21" fx:controller="com.example.obstaclecourse.Controllers.diceController">
+<VBox id="AnchorPane" alignment="TOP_CENTER" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21" fx:controller="com.example.obstaclecourse.Controllers.DiceController">
     <Text fx:id="currentPlayer" strokeType="OUTSIDE" strokeWidth="0.0" text="Jake's Turn">
         <VBox.margin>
             <Insets bottom="5.0" top="5.0" />
