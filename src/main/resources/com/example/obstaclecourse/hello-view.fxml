@@ -361,25 +361,27 @@
       <Region prefHeight="21.0" prefWidth="430.0" style="-fx-background-color: black;" />
       <VBox alignment="TOP_CENTER" style="-fx-background-color: white; -fx-border-width: 5px; -fx-border-color: black;">
          <children>
-            <Text fx:id="currentPlayer" strokeType="OUTSIDE" strokeWidth="0.0" text="Jake's Turn">
-               <VBox.margin>
-                  <Insets bottom="5.0" top="5.0" />
-               </VBox.margin>
-            </Text>
-            <ImageView fitHeight="88.0" fitWidth="108.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@images/dice.png" />
-               </image>
-               <VBox.margin>
-                  <Insets bottom="5.0" top="5.0" />
-               </VBox.margin>
-            </ImageView>
-            <Button fx:id="rollBtn" mnemonicParsing="false" onAction="#roll" text="ROLL" />
-            <Text fx:id="diceValues" strokeType="OUTSIDE" strokeWidth="0.0" text="2, 3">
-               <VBox.margin>
-                  <Insets bottom="5.0" top="5.0" />
-               </VBox.margin>
-            </Text>
+            <fx:include fx:id="diceComponent" source="dice-view.fxml" />
+<!--            <Text fx:id="currentPlayer" strokeType="OUTSIDE" strokeWidth="0.0" text="Jake's Turn">-->
+<!--               <VBox.margin>-->
+<!--                  <Insets bottom="5.0" top="5.0" />-->
+<!--               </VBox.margin>-->
+<!--            </Text>-->
+<!--            <ImageView fitHeight="88.0" fitWidth="108.0" pickOnBounds="true" preserveRatio="true">-->
+<!--               <image>-->
+<!--                  <Image url="@images/dice.png" />-->
+<!--               </image>-->
+<!--               <VBox.margin>-->
+<!--                  <Insets bottom="5.0" top="5.0" />-->
+<!--               </VBox.margin>-->
+<!--            </ImageView>-->
+<!--            <Button fx:id="rollBtn" mnemonicParsing="false" onAction="#roll" text="ROLL" />-->
+<!--            <Text fx:id="diceValues" strokeType="OUTSIDE" strokeWidth="0.0" text="2, 3">-->
+<!--               <VBox.margin>-->
+<!--                  <Insets bottom="5.0" top="5.0" />-->
+<!--               </VBox.margin>-->
+<!--            </Text>-->
+
          </children>
          <opaqueInsets>
             <Insets />
