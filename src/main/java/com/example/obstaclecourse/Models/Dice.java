@@ -23,11 +23,11 @@ public class Dice {
     }
 
     public int roll(){
-        System.out.println("Rolling dice. Property change will be fired.");
+//        System.out.println("Rolling dice. Property change will be fired.");
         // keep a reference to the old value for comparison
         int oldValue = this.value;
 
-        this.value = (int)(Math.random() * 9 + 1);  // Set the dice face to some random value between 1 and 9 inclusive
+        this.value = (int)(Math.random() * 8 + 1);  // Set the dice face to some random value between 1 and 9 inclusive
 
         this.support.firePropertyChange("diceValue", oldValue, this.value);
 

@@ -1,15 +1,20 @@
 package com.example.obstaclecourse.Controllers;
 
-import com.example.obstaclecourse.Models.Board;
-import com.example.obstaclecourse.Models.Dice;
-import com.example.obstaclecourse.Models.Player;
-import com.example.obstaclecourse.Models.ScoreBoard;
+import com.example.obstaclecourse.Models.*;
+
 import javafx.fxml.FXML;
+import javafx.geometry.HPos;
+import javafx.geometry.Insets;
+import javafx.geometry.VPos;
+import javafx.scene.control.Alert;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -20,8 +25,11 @@ public class BoardController implements PropertyChangeListener {
 
     private Board board;
     private ScoreBoard scoreBoard;
-
+    private ScoreBoardController scoreBoardController;
     private ArrayList<Player> players = new ArrayList<>();
+
+    @FXML
+    private GridPane gameBoardGridPane;
 
 
     // need to receive user input and pass it in here to create the players
@@ -59,8 +67,13 @@ public class BoardController implements PropertyChangeListener {
     }
 
 
+    public void setScoreBoardController(ScoreBoardController controller) {
+        this.scoreBoardController = controller;
+        this.scoreBoardController.setScoreBoard(this.scoreBoard); // 设置ScoreBoard
+    }
     @FXML
     private void initialize() {
+
         Dice dice = Dice.getInstance();
         dice.addPropertyChangeListener(this);
 
@@ -69,14 +82,19 @@ public class BoardController implements PropertyChangeListener {
         // both the 'virtual' board and the board in the UI represent player's position as an array of two integers
         // the first integer represents the row, the second integer represents the column
         this.board = new Board(8, Dice.getInstance(), this.players);
-
         playerController.setPlayerModel(this.board.nextPlayer());
-
+        setupObstacles();
         this.scoreBoard = new ScoreBoard(new ArrayList<Player>(), 2);
 
         // 1. player rolls the dice, dice values are updated
         // 2. board.movePlayer updates player position
         // 3. pull those values out of the player, and use them to move the player in the UI
+
+        this.board.gameWonProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal) {
+                showWinningAlert();
+            }
+        });
     }
 
     @Override
@@ -88,8 +106,53 @@ public class BoardController implements PropertyChangeListener {
                 // Dice value has changed, move player
 
                 // FIXME: The player is hard-coded here. It should alternate.
-                this.board.movePlayer(0, Dice.getInstance().getValue(), this.scoreBoard);
+                try {
+                    this.board.movePlayer(0, Dice.getInstance().getValue(), this.scoreBoard);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                scoreBoardController.updateScoreDisplay();
             }
         }
     }
+
+
+    private void setupObstacles() {
+        // Loop through the board to set up obstacles
+        for (int row = 0; row < 8; row++) {
+            for (int col = 0; col < 8; col++) {
+                Board.Cell cell = board.getCell(row, col);
+                if (cell.hasObstacle()) {
+                    Obstacle obstacle = cell.getObstacle();
+                    // Create an ImageView for the obstacle
+                    ImageView obstacleView = createObstacleImageView(obstacle);
+                    // Set margins and alignment for the obstacleView
+                    GridPane.setMargin(obstacleView, new Insets(0, 0, 0, 5));
+                    GridPane.setHalignment(obstacleView, HPos.CENTER);
+                    GridPane.setValignment(obstacleView, VPos.CENTER);
+                    gameBoardGridPane.add(obstacleView, col, row);
+                }
+            }
+        }
+    }
+
+    private ImageView createObstacleImageView(Obstacle obstacle) {
+        // Method to create an ImageView for the obstacle
+        Image image = new Image(getClass().getResourceAsStream("/com/example/obstaclecourse/images/" + obstacle.getSymbol() + ".png"));
+        ImageView obstacleView = new ImageView(image);
+        obstacleView.setFitHeight(35);
+        obstacleView.setFitWidth(35);
+        obstacleView.setPreserveRatio(true);
+        return obstacleView;
+    }
+
+        private void showWinningAlert() {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Game Over");
+            alert.setHeaderText(null);
+            alert.setContentText("You win！");
+            alert.showAndWait();
+        }
+
+
 }

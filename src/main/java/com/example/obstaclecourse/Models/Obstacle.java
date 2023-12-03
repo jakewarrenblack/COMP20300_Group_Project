@@ -2,7 +2,7 @@ package com.example.obstaclecourse.Models;
 
 public interface Obstacle {
 
-    void applyEffect(Player p, int size);
+    void applyEffect(Player p, int size, Board.Cell[][] cells);
 
     String printEffect();
 

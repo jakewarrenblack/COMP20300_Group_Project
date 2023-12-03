@@ -1,5 +1,12 @@
 package com.example.obstaclecourse.Models;
 
+import com.example.obstaclecourse.Controllers.ScoreBoardController;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+
+import java.io.IOException;
 import java.util.*;
 
 
@@ -15,10 +22,12 @@ public class Board {
 
     private Player currentPlayer;
 
+    private BooleanProperty gameWon = new SimpleBooleanProperty(false);
+
+
     public Board(int size, Dice dice, ArrayList<Player> players) {
         this.size = size;
         this.cells = new Cell[size][size];
-        initializeCells();
         this.dice = dice;
         this.players = players;
 
@@ -81,7 +90,7 @@ public class Board {
         this.Contrast = Collections.unmodifiableList(coordinatesList);
 
         this.currentPlayer = this.setInitialPlayer();
-
+        initializeCells();
     }
 
 
@@ -113,8 +122,6 @@ public class Board {
     }
 
 
-
-
     private void initializeCells() {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
@@ -133,7 +140,15 @@ public class Board {
             int randomRow = (int) (Math.random() * this.size);
             if (randomColumn == 0 && randomRow == 0) {
                 i--;
+                continue;
             }
+            int size = Contrast.size();
+            int[] ints = Contrast.get(size - 1);
+            if (ints[0] == randomColumn && ints[1] == randomRow) {
+                i--;
+                continue;
+            }
+
             // Generate a random number based on the number of obstacle types (randomly generate obstacles)
             int randomObstacle = (int) (Math.random() * Arrays.stream(Pit.Type.values()).count());
             // Add obstacles to the board
@@ -166,6 +181,11 @@ public class Board {
             // Check if the next cell is within bounds
             if (x < cells.length && y < cells[0].length) {
                 // Set the next cell as a spike obstacle
+                int size = Contrast.size();
+                int[] ints = Contrast.get(size - 1);
+                if (ints[0] == x && ints[1] == y) {
+                    continue;
+                }
                 cells[x][y].setObstacle(new Pit(Pit.Type.SPIKE, 1));
             } else {
                 // if the cell we tried isn't within bounds, to continue our spike trap:
@@ -190,7 +210,7 @@ public class Board {
     }
 
 
-    public void printBoard(){
+    public void printBoard() {
         int[] playerPosition = currentPlayer.getPosition();
 
         for (int i = 0; i < cells.length; i++) {
@@ -216,8 +236,7 @@ public class Board {
         players.add(player);
     }
 
-
-    public Player movePlayer(int playerNumber, int steps, ScoreBoard scoreBoard) {
+    public Player movePlayer(int playerNumber, int steps, ScoreBoard scoreBoard) throws IOException {
         Player player = players.get(playerNumber);
 
         if (player == null) {
@@ -233,9 +252,10 @@ public class Board {
 
         int newPosition = integer + steps - 1;
 
-        if (newPosition >= 99) {
+        if (newPosition >= 63) {
             System.out.println("Game over! " + currentPlayer.getName() + " wins");
-            newPosition = 99;
+            newPosition = 63;
+            gameWon.set(true);
         }
         // Convert 1D newPosition to 2D newX and newY
         int newX = Contrast.get(newPosition)[0]; // Row number
@@ -253,17 +273,17 @@ public class Board {
                 scoreBoard.deductScore(currentPlayer.getName(), player.getScore());
             }
             scoreBoard.deductScore(currentPlayer.getName(), 3);
-
             System.out.println("Player " + playerNumber + " has encountered a " + newCell.getObstacle().getType().toString() + " pit!");
             System.out.println("Effect:" + newCell.getObstacle().printEffect());
 
-            newCell.getObstacle().applyEffect(player, size);
+            newCell.getObstacle().applyEffect(player, size, cells);
             // Decide whether to update the player's position based on the effect of applyEffect
-
+            // 调用ScoreBoardController中的upScore方法更新分数
         } else {
             // Update the player's position
             player.setPosition(newPosition2D);
             scoreBoard.addScore(currentPlayer.getName(), steps);
+            // 调用ScoreBoardController中的upScore方法更新分数
         }
 
         this.printBoard();
@@ -284,7 +304,7 @@ public class Board {
         players.remove(playerName);
     }
 
-    private class Cell {
+    public class Cell {
         private Obstacle obstacle;
         int xPos;
         int yPos;
@@ -321,9 +341,9 @@ public class Board {
     }
 
 
-    public Player nextPlayer(){
+    public Player nextPlayer() {
         // if this function is being called for the first time, we need to set the current player
-        if(this.currentPlayer == null){
+        if (this.currentPlayer == null) {
             this.currentPlayer = this.setInitialPlayer();
             return this.currentPlayer;
         }
@@ -344,4 +364,7 @@ public class Board {
         return this.currentPlayer;
     }
 
+    public BooleanProperty gameWonProperty() {
+        return gameWon;
+    }
 }
