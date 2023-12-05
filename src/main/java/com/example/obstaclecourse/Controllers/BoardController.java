@@ -14,6 +14,7 @@ import javafx.scene.layout.VBox;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -27,6 +28,7 @@ public class BoardController implements PropertyChangeListener {
     private ScoreBoard scoreBoard;
     private ScoreBoardController scoreBoardController;
     private ArrayList<Player> players = new ArrayList<>();
+
 
     @FXML
     private GridPane gameBoardGridPane;
@@ -107,7 +109,7 @@ public class BoardController implements PropertyChangeListener {
 
                 // FIXME: The player is hard-coded here. It should alternate.
                 try {
-                    this.board.movePlayer(0, Dice.getInstance().getValue(), this.scoreBoard);
+                    this.board.movePlayer(board.nextPlayer().getIndex(), Dice.getInstance().getValue(), this.scoreBoard);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -146,7 +148,7 @@ public class BoardController implements PropertyChangeListener {
         return obstacleView;
     }
 
-        private void showWinningAlert() {
+    private void showWinningAlert() {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Game Over");
             alert.setHeaderText(null);

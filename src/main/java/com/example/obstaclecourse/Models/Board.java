@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 
+import java.beans.PropertyChangeSupport;
 import java.io.IOException;
 import java.util.*;
 
@@ -24,8 +25,14 @@ public class Board {
 
     private BooleanProperty gameWon = new SimpleBooleanProperty(false);
 
+    // just like the player fires an event when its position changes,
+    // the board should fire an event when the currently active player changes
+    // in order for the '<PLAYER>'s turn' text to be updated
+    private final PropertyChangeSupport support;
+
 
     public Board(int size, Dice dice, ArrayList<Player> players) {
+        this.support = new PropertyChangeSupport(this);
         this.size = size;
         this.cells = new Cell[size][size];
         this.dice = dice;

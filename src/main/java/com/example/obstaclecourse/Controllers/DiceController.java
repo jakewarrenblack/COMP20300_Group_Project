@@ -5,8 +5,14 @@ import javafx.scene.text.Text;
 public class DiceController {
     Dice dice;
 
+    // the dice needs to listen for when the player changes
+    // so it can update the UI
+
     @FXML
     private Text diceValues;
+
+    @FXML
+    private Text currentPlayer;
 
     public void roll(){
         this.dice.roll();

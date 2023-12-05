@@ -1,13 +1,13 @@
 package com.example.obstaclecourse.Models;
+import com.example.obstaclecourse.Utils.EventProducer;
+
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
-public class Dice {
+// property change listener allows us to detect a change, and use that to move the player in the controller
+public class Dice extends EventProducer {
     public static Dice single_instance = null;
     private int value;
-
-    // property change listener allows us to detect a change, and use that to move the player in the controller
-    private final PropertyChangeSupport support;
 
     // Singleton pattern. Only a single instance of the dice can exist. This is so the same dice is used by ObstacleCourse, Board, BoardController, and DiceController
     public static Dice getInstance(){
@@ -19,11 +19,9 @@ public class Dice {
 
     private Dice(){
         this.value = 0;
-        this.support = new PropertyChangeSupport(this);
     }
 
     public int roll(){
-//        System.out.println("Rolling dice. Property change will be fired.");
         // keep a reference to the old value for comparison
         int oldValue = this.value;
 
@@ -33,16 +31,6 @@ public class Dice {
 
         return this.value;
     }
-
-    // use these for registering and unregistering listeners in other files
-    public void addPropertyChangeListener(PropertyChangeListener pcl) {
-        support.addPropertyChangeListener(pcl);
-    }
-
-    public void removePropertyChangeListener(PropertyChangeListener pcl) {
-        support.removePropertyChangeListener(pcl);
-    }
-
 
     public int getValue(){
         return this.value;
