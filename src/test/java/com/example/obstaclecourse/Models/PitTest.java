@@ -73,10 +73,10 @@ class PitTest {
         for(Pit.Type type : Pit.Type.values()) {
             Pit pit = new Pit(type);
             String expected = switch (type) {
-                case BOTTOMLESS -> "You fell into a bottomless pit! You are now back at the start.";
-                case SPIKE -> "You fell into a spike pit! You lose " + pit.getLength() + " moves.";
-                case FIRE -> "You fell into a fire pit! You lose 1 move.";
-                case PORTAL -> "You fell into a portal pit! You are now at a random location.";
+                case FIRE -> "Causes player to miss a turn!";
+                case SPIKE -> "Consumes " + + pit.getLength() + " squares, must skip!";
+                case BOTTOMLESS -> "Sends player back to start!";
+                case PORTAL -> "Teleports player to another location!";
             };
             assertEquals(expected, pit.printEffect());
         }
