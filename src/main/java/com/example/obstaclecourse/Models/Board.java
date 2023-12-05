@@ -375,6 +375,11 @@ public class Board extends EventProducer {
         return this.currentPlayer;
     }
 
+    // getCells, needed for testing
+    public Cell[][] getCells() {
+        return this.cells;
+    }
+
     public BooleanProperty gameWonProperty() {
         return gameWon;
     }
