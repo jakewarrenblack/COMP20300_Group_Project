@@ -5,6 +5,7 @@ import java.util.Random;
 
 public class Pit implements Obstacle {
     public enum Type {BOTTOMLESS, SPIKE, FIRE, PORTAL}
+
     private final Type type;
 
     // If it's not of spike type, default length is 1
@@ -54,7 +55,7 @@ public class Pit implements Obstacle {
     @Override
 
     public void applyEffect(Player p, int size, Board.Cell[][] cells) {
-        int[] origin = {0,0};
+        int[] origin = {0, 0};
         switch (this.type) {
             case BOTTOMLESS: {
                 p.setPosition(origin);
@@ -117,19 +118,4 @@ public class Pit implements Obstacle {
     public int getLength() {
         return this.length;
     }
-
-//    public String getImagePath() {
-//        switch (this.type) {
-//            case BOTTOMLESS:
-//                return "/com/example/obstaclecourse/images/bottomless.png";
-//            case SPIKE:
-//                return "/com/example/obstaclecourse/images/spike.png";
-//            case FIRE:
-//                return "/com/example/obstaclecourse/images/fire.png";
-//            case PORTAL:
-//                return "/com/example/obstaclecourse/images/portal.png";
-//            default:
-//                throw new IllegalStateException("Unexpected value: " + this.type);
-//        }
-//    }
 }

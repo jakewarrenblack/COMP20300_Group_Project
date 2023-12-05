@@ -10,6 +10,10 @@ import javafx.scene.text.Text;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+/**
+ * Controller class for managing individual player UI elements.
+ * Handles the movement and display of an individual player on the game board.
+ */
 public class PlayerController implements PropertyChangeListener {
     @FXML
     private ImageView player;
@@ -23,13 +27,21 @@ public class PlayerController implements PropertyChangeListener {
 //        this.playerLabel.setText(playerLabel);
 //    }
 
+    /**
+     * Sets the player model associated with this controller.
+     * Adds this controller as a listener to the player model.
+     * @param playerModel The player model.
+     */
     public void setPlayerModel(Player playerModel) {
         this.playerModel = playerModel;
         this.playerModel.addPropertyChangeListener(this);
     }
 
 
-
+    /**
+     * Moves the player's image view to a new position on the game board.
+     * @param playerView The image view of the player.
+     */
     public void movePlayerForward(ImageView playerView) {
         GridPane gridPane = (GridPane) player.getParent();
 
@@ -43,6 +55,11 @@ public class PlayerController implements PropertyChangeListener {
        player.toFront();
     }
 
+    /**
+     * Handles property change events fired by the player model.
+     * Moves the player's image view when the player position changes in the model.
+     * @param evt The property change event.
+     */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         System.out.println("Player position changed, moving player in UI");

@@ -4,6 +4,7 @@ import com.example.obstaclecourse.Models.*;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
@@ -18,10 +19,17 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 import java.util.Scanner;
 
+/**
+ * Controller class managing the game board and player actions.
+ */
 public class BoardController implements PropertyChangeListener {
+    public Text PlayerOneDetails;
+    public Text PlayerTwoDetails;
     private ArrayList<PlayerController> playerControllers = new ArrayList<>();
 
 
@@ -42,8 +50,13 @@ public class BoardController implements PropertyChangeListener {
     @FXML
     private Text currentPlayer;
 
-
-    // need to receive user input and pass it in here to create the players
+    /**
+     * Retrieves the number of players and their names from the console, creating player objects and adding them to the player list.
+     * Prompts the user to enter a valid number of players if the input is less than 2.
+     * Prints a welcome message on the console, including the names of the players.
+     *
+     * @return The list of created players
+     */
     public ArrayList<Player> addPlayers() {
         Scanner in = new Scanner(System.in);
 
@@ -59,6 +72,12 @@ public class BoardController implements PropertyChangeListener {
         for (int i = 0; i < numPlayers; i++) {
             System.out.println("What is the name of player " + (i + 1) + "?");
             String name = in.next();
+
+            if (i==0){
+                PlayerOneDetails.setText(name+":"+0);
+            }else {
+                PlayerTwoDetails.setText(name+":"+0);
+            }
             Player player = new Player(name, i);
             this.players.add(player);
         }
@@ -77,11 +96,20 @@ public class BoardController implements PropertyChangeListener {
         return players;
     }
 
-
+    /**
+     * Sets the scoreboard controller.
+     *
+     * @param controller The scoreboard controller to be set
+     */
     public void setScoreBoardController(ScoreBoardController controller) {
         this.scoreBoardController = controller;
-        this.scoreBoardController.setScoreBoard(this.scoreBoard); // 设置ScoreBoard
+        this.scoreBoardController.setScoreBoard(this.scoreBoard);
     }
+
+    /**
+     * Initializes the controller and the game board.
+     * Called after the FXML file has been loaded.
+     */
     @FXML
     private void initialize() {
 
@@ -114,6 +142,12 @@ public class BoardController implements PropertyChangeListener {
         });
     }
 
+    /**
+     * Handles property change events triggered by the game model.
+     * Updates the UI based on changes in the game state.
+     * @param evt The property change event.
+     */
+
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         // adding this check in case the propertyChange is fired before the board is initialized
@@ -125,45 +159,90 @@ public class BoardController implements PropertyChangeListener {
                     Player nextPlayer = this.board.nextPlayer();
                     currentPlayer.setText(nextPlayer.getName().toUpperCase() + "'S TURN");
 
-                    this.board.movePlayer(nextPlayer.getIndex(), Dice.getInstance().getValue(), this.scoreBoard);
+                    Player player = this.board.movePlayer(nextPlayer.getIndex(), Dice.getInstance().getValue(), this.scoreBoard);
+                    int index = PlayerOneDetails.getText().indexOf(":");
+                    String PlayerOneName = PlayerOneDetails.getText().substring(0, index); // 获取 "o" 前面的部分
+                    int PlayerOneScore = Integer.parseInt(PlayerOneDetails.getText().substring(index + 1));
+                    int index2 = PlayerTwoDetails.getText().indexOf(":");
+                    String PlayerTwoName = PlayerTwoDetails.getText().substring(0, index2); // 获取 "o" 前面的部分
+                    int PlayerTwoScore = Integer.parseInt(PlayerTwoDetails.getText().substring(index2 + 1));
+                    if (player.getName().equals(PlayerOneName)){
+                        if (player.getScore()==-1){
+                            int i=PlayerOneScore + Dice.getInstance().getValue();
+                            System.out.println("one"+i);
+                            PlayerOneDetails.setText(player.getName()+":"+i);
+                        }
+                        if(player.getScore()==-3){
+                            if (PlayerOneScore-3>0){
+                                int i=PlayerOneScore - 3;
+                                System.out.println("one"+i);
+                                PlayerOneDetails.setText(player.getName()+":"+i);
+                            }else {
+                                int i=0;
+                                PlayerOneDetails.setText(player.getName()+":"+i);
+                            }
+                        }
+                    }
+                    if (player.getName().equals(PlayerTwoName)){
+                        if (player.getScore()==-1){
+                            int i=PlayerTwoScore +Dice.getInstance().getValue();
+                            System.out.println("one"+i);
+                            PlayerTwoDetails.setText(player.getName()+":"+i);
+                        }
+                        if(player.getScore()==-3){
+                            if (PlayerTwoScore-3>0){
+                                int i=PlayerTwoScore - 3;
+                                System.out.println("two"+i);
+                                PlayerTwoDetails.setText(player.getName()+":"+i);
+                            }else {
+                                int i=0;
+                                PlayerTwoDetails.setText(player.getName()+":"+i);
+                            }
+                        }
 
-
-
+                    }
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                scoreBoardController.updateScoreDisplay();
             }
         }
     }
 
- public ArrayList<ImageView> initializePlayers(){
-        ArrayList<ImageView> playerViews = new ArrayList<>();
-        for (Player player: this.players) {
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/obstaclecourse/player-view.fxml"));
-                ImageView playerView = loader.load();
-                PlayerController playerController = loader.getController();
+    /**
+     * Adds player views to the game board.
+     * Initializes and sets up player controllers for each player.
+     * @return An ArrayList containing ImageViews for each player.
+     */
+     public ArrayList<ImageView> initializePlayers(){
+            ArrayList<ImageView> playerViews = new ArrayList<>();
+            for (Player player: this.players) {
+                try {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/obstaclecourse/player-view.fxml"));
+                    ImageView playerView = loader.load();
+                    PlayerController playerController = loader.getController();
 
-                playerController.setPlayerModel(player);
+                    playerController.setPlayerModel(player);
 
-                //playerController.setPlayerLabel(player.getName());
+                    //playerController.setPlayerLabel(player.getName());
 
-                // Set the ImageView in the Player model
-                player.setImageView(playerView);
+                    // Set the ImageView in the Player model
+                    player.setImageView(playerView);
 
-                playerControllers.add(playerController);
+                    playerControllers.add(playerController);
 
-                // Add the player view to the list
-                playerViews.add(playerView);
-            } catch (IOException e) {
-                e.printStackTrace();
+                    // Add the player view to the list
+                    playerViews.add(playerView);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
+            return playerViews;
         }
-        return playerViews;
-    }
 
-
+    /**
+     * Sets up obstacles on the game board based on their presence in each cell of the board.
+     * Loops through the board to identify cells containing obstacles and adds their ImageView representations to the game board UI.
+     */
     private void setupObstacles() {
         // Loop through the board to set up obstacles
         for (int row = 0; row < 8; row++) {
@@ -183,6 +262,12 @@ public class BoardController implements PropertyChangeListener {
         }
     }
 
+    /**
+     * Creates an ImageView representation for a given obstacle.
+     *
+     * @param obstacle The obstacle for which an ImageView is to be created
+     * @return The ImageView representing the obstacle
+     */
     private ImageView createObstacleImageView(Obstacle obstacle) {
         // Method to create an ImageView for the obstacle
         Image image = new Image(getClass().getResourceAsStream("/com/example/obstaclecourse/images/" + obstacle.getSymbol() + ".png"));
@@ -193,6 +278,10 @@ public class BoardController implements PropertyChangeListener {
         return obstacleView;
     }
 
+    /**
+     * Displays an alert indicating the game has been won.
+     * Shows a dialog box with a success message when the game is won.
+     */
     private void showWinningAlert() {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Game Over");
@@ -200,6 +289,7 @@ public class BoardController implements PropertyChangeListener {
             alert.setContentText("You win！");
             alert.showAndWait();
         }
+
 
 
 }

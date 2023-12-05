@@ -20,12 +20,22 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import javafx.scene.image.ImageView;
 
+/**
+ * Main class for the Obstacle Course game application.
+ * Manages the UI and initializes the game components.
+ */
 public class ObstacleCourse extends Application {
+
+    /**
+     * Starts the Obstacle Course game application.
+     * @param stage The primary stage for the application.
+     * @throws IOException If there is an error loading the FXML files.
+     */
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(ObstacleCourse.class.getResource("hello-view.fxml"));
 
-        // 加载 BoardController 的 FXML
+
         FXMLLoader boardLoader = new FXMLLoader(ObstacleCourse.class.getResource("hello-view.fxml"));
         Parent boardRoot = boardLoader.load();
         BoardController boardController = boardLoader.getController();
@@ -63,6 +73,9 @@ public class ObstacleCourse extends Application {
         stage.show();
     }
 
+    /**
+     * Main method to launch the application.
+     */
     public static void main(String[] args) {
         launch();
     }
