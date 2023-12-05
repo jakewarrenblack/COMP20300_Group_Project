@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<!-- Root element -->
+
+<VBox id="AnchorPane" alignment="TOP_CENTER" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21" fx:controller="com.example.obstaclecourse.Controllers.DiceController">
+
+    <ImageView fitHeight="88.0" fitWidth="108.0" pickOnBounds="true" preserveRatio="true">
+        <image>
+            <Image url="@images/dice.png" />
+        </image>
+        <VBox.margin>
+            <Insets bottom="5.0" top="5.0" />
+        </VBox.margin>
+    </ImageView>
+    <Button fx:id="rollBtn" mnemonicParsing="false" onAction="#roll" text="ROLL" />
+    <Text fx:id="diceValues" strokeType="OUTSIDE" strokeWidth="0.0" text="">
+        <VBox.margin>
+            <Insets bottom="5.0" top="5.0" />
+        </VBox.margin>
+    </Text>
+</VBox>
