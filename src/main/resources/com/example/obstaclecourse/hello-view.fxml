@@ -36,7 +36,7 @@
                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 </rowConstraints>
 
-                <ImageView fitHeight="65.0" fitWidth="54.0" layoutX="0.0" layoutY="9.0" pickOnBounds="true" GridPane.columnIndex="0">
+                <ImageView fitHeight="65.0" fitWidth="54.0" layoutX="0.0" layoutY="9.0" pickOnBounds="true">
                     <Image url="@images/tile.png" />
                 </ImageView>
                 <!-- import the player-view.fxml file here -->
@@ -356,6 +356,7 @@
                         <Image url="@images/tile_finish.png" />
                     </image>
                 </ImageView>
+<!--            <fx:include fx:id="player2" layoutX="50.0" source="player-view.fxml" GridPane.columnIndex="2" GridPane.halignment="CENTER" />-->
             </GridPane>
             <Region prefHeight="21.0" prefWidth="430.0" style="-fx-background-color: black;" />
             <VBox alignment="TOP_CENTER" prefWidth="430.0" style="-fx-background-color: DARKSEAGREEN; -fx-border-width: 5px; -fx-border-color: black;">

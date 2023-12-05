@@ -3,6 +3,7 @@ package com.example.obstaclecourse.Controllers;
 import com.example.obstaclecourse.Models.*;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
@@ -21,6 +22,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class BoardController implements PropertyChangeListener {
+    private ArrayList<PlayerController> playerControllers = new ArrayList<>();
+
 
 
     public ImageView player;
@@ -117,9 +120,7 @@ public class BoardController implements PropertyChangeListener {
         if(this.board != null) {
             if ("diceValue".equals(evt.getPropertyName())) {
                 System.out.println("Dice value changed, moving player in virtual board");
-                // Dice value has changed, move player
-
-                // FIXME: The player is hard-coded here. It should alternate.
+                // Dice value has changed, move player in the virtual board
                 try {
                     Player nextPlayer = this.board.nextPlayer();
                     currentPlayer.setText(nextPlayer.getName().toUpperCase() + "'S TURN");
@@ -134,6 +135,32 @@ public class BoardController implements PropertyChangeListener {
                 scoreBoardController.updateScoreDisplay();
             }
         }
+    }
+
+ public ArrayList<ImageView> initializePlayers(){
+        ArrayList<ImageView> playerViews = new ArrayList<>();
+        for (Player player: this.players) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/obstaclecourse/player-view.fxml"));
+                ImageView playerView = loader.load();
+                PlayerController playerController = loader.getController();
+
+                playerController.setPlayerModel(player);
+
+                //playerController.setPlayerLabel(player.getName());
+
+                // Set the ImageView in the Player model
+                player.setImageView(playerView);
+
+                playerControllers.add(playerController);
+
+                // Add the player view to the list
+                playerViews.add(playerView);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return playerViews;
     }
 
 

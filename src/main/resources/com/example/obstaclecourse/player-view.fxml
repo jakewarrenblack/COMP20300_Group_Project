@@ -5,5 +5,32 @@
 <?import javafx.scene.layout.GridPane?>
 
 <ImageView fx:id="player" fitHeight="65.0" fitWidth="54.0" layoutX="0.0" layoutY="9.0" pickOnBounds="true" GridPane.columnIndex="0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.obstaclecourse.Controllers.PlayerController">
-    <Image url="@images/knight-single.png" />
+   <Image url="@images/knight-single.png" />
 </ImageView>
+
+<!--<?xml version="1.0" encoding="UTF-8"?>-->
+
+<!--<?import javafx.scene.image.Image?>-->
+<!--<?import javafx.scene.image.ImageView?>-->
+<!--<?import javafx.scene.layout.HBox?>-->
+<!--<?import javafx.scene.layout.VBox?>-->
+<!--<?import javafx.scene.text.Font?>-->
+<!--<?import javafx.scene.text.Text?>-->
+
+
+<!--<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"-->
+<!--      fx:controller="com.example.obstaclecourse.Controllers.PlayerController">-->
+<!--   <ImageView fx:id="player" fitHeight="38.0" fitWidth="30.0" pickOnBounds="true">-->
+<!--      <Image url="@images/knight-single.png"/>-->
+<!--   </ImageView>-->
+<!--   <HBox style="-fx-background-color: black;">-->
+<!--      <Text fx:id="playerLabel" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Player"-->
+<!--            textAlignment="CENTER">-->
+<!--         <font>-->
+<!--            <Font size="10.0"/>-->
+<!--         </font>-->
+<!--      </Text>-->
+<!--   </HBox>-->
+<!--</VBox>-->
+
+

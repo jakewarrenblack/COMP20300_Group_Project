@@ -1,11 +1,13 @@
 package com.example.obstaclecourse.Models;
 
 import com.example.obstaclecourse.Utils.EventProducer;
+import javafx.scene.image.ImageView;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
 public class Player extends EventProducer {
+    private ImageView imageView;
     private final int index;
     private final String name;
     private int[] position = new int[2];  // Player's current position represented by an array containing two integers
@@ -16,6 +18,15 @@ public class Player extends EventProducer {
         this.name = name;
         this.movesAvailable = 0;
         this.index = index;
+    }
+
+
+    public void setImageView(ImageView imageView) {
+        this.imageView = imageView;
+    }
+
+    public ImageView getImageView() {
+        return imageView;
     }
 
 

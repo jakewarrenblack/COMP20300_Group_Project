@@ -9,12 +9,16 @@ import com.example.obstaclecourse.Models.ScoreBoard;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import javafx.scene.image.ImageView;
 
 public class ObstacleCourse extends Application {
     @Override
@@ -26,11 +30,29 @@ public class ObstacleCourse extends Application {
         Parent boardRoot = boardLoader.load();
         BoardController boardController = boardLoader.getController();
 
+
+
+
         FXMLLoader scoreBoardLoader = new FXMLLoader(ObstacleCourse.class.getResource("score-view.fxml"));
         Parent scoreBoardRoot = scoreBoardLoader.load();
         ScoreBoardController scoreBoardController = scoreBoardLoader.getController();
 
         boardController.setScoreBoardController(scoreBoardController);
+
+
+        // I believe this should be okay, because right now we're instantiating Player objects from the console
+        // but if we were to instantiate them from the UI, this would break - I THINK!
+        ArrayList<ImageView> playerViews = boardController.initializePlayers();
+
+        // Add player views to the game scene
+        for (ImageView playerView : playerViews) {
+            HBox gameScene = (HBox) boardRoot;
+            VBox vBox = (VBox) gameScene.getChildren().get(0); // Root component is a HBox, with a VBox inside it
+            GridPane gridPane = (GridPane) vBox.getChildren().get(0); // Within that VBox is a Gridpane
+
+            gridPane.getChildren().add(playerView);
+            playerView.toFront();
+        }
 
         //Scene scene = new Scene(fxmlLoader.load());
         Scene scene = new Scene(boardRoot);
