@@ -7,6 +7,10 @@ import javafx.scene.text.Text;
 
 import java.util.List;
 
+/**
+ * Controller class for the ScoreBoard view.
+ * Manages the display of player scores in the UI.
+ */
 public class ScoreBoardController {
     @FXML
     private Text playerOneDetails;
@@ -15,10 +19,18 @@ public class ScoreBoardController {
 
     private ScoreBoard scoreBoard;
 
+    /**
+     * Sets the ScoreBoard associated with this controller.
+     * @param scoreBoard The ScoreBoard object.
+     */
     public void setScoreBoard(ScoreBoard scoreBoard) {
         this.scoreBoard = scoreBoard;
     }
 
+    /**
+     * Updates the score display in the UI with the current player scores.
+     * Retrieves player scores from the ScoreBoard and displays them.
+     */
     public void updateScoreDisplay() {
         if (scoreBoard != null) {
             List<Player> players = scoreBoard.getPlayerScores();
@@ -33,16 +45,6 @@ public class ScoreBoardController {
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -11,10 +11,13 @@ import java.beans.PropertyChangeSupport;
 import java.io.IOException;
 import java.util.*;
 
-
+/**
+ * Represents the game board for the obstacle course game.
+ * The board consists of a grid of cells, and it tracks the positions of players and obstacles.
+ */
 public class Board extends EventProducer {
     private final Dice dice;
-    private final int size;  // Board Size eg.10*10
+    private final int size;  // Board Size eg.8*8
     private final Cell[][] cells;
 
     private static List<int[]> Contrast;
@@ -31,7 +34,13 @@ public class Board extends EventProducer {
     // in order for the '<PLAYER>'s turn' text to be updated
     private final PropertyChangeSupport support;
 
-
+    /**
+     * Constructs a new Board with specified size, dice, and players.
+     *
+     * @param size    The size of the board (e.g., 8x8).
+     * @param dice    The dice used for the game.
+     * @param players The list of players participating in the game.
+     */
     public Board(int size, Dice dice, ArrayList<Player> players) {
         this.support = new PropertyChangeSupport(this);
         this.size = size;
@@ -129,7 +138,9 @@ public class Board extends EventProducer {
         return this.currentPlayer;
     }
 
-
+    /**
+     * Initializes the cells of the board and generates obstacles.
+     */
     private void initializeCells() {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
@@ -137,7 +148,11 @@ public class Board extends EventProducer {
             }
         }
 
-        // Generate obstacles
+/**
+ * Randomly generates obstacles on the board.
+ *
+ * @param numObstacles The number of obstacles to generate.
+ */
         initialiseObstacles(20);
     }
 
@@ -178,7 +193,12 @@ public class Board extends EventProducer {
         }
     }
 
-
+    /**
+     * Handles the creation and placement of spike pit obstacles.
+     *
+     * @param c The cell where the spike pit starts.
+     * @param p The pit object representing the spike pit.
+     */
     public void handleSpikePit(Cell c, Pit p) {
         c.setObstacle(p);
 
@@ -217,7 +237,9 @@ public class Board extends EventProducer {
         }
     }
 
-
+    /**
+     * Prints the current state of the board to the console.
+     */
     public void printBoard() {
         int[] playerPosition = currentPlayer.getPosition();
 
@@ -240,10 +262,17 @@ public class Board extends EventProducer {
         }
     }
 
-    public void addPlayer(Player player) {
-        players.add(player);
-    }
 
+
+    /**
+     * Moves a player a specified number of steps on the board.
+     *
+     * @param playerNumber The index of the player to move.
+     * @param steps        The number of steps to move the player.
+     * @param scoreBoard   The score board to update scores if necessary.
+     * @return The moved player.
+     * @throws IOException If an I/O error occurs.
+     */
     public Player movePlayer(int playerNumber, int steps, ScoreBoard scoreBoard) throws IOException {
         Player player = players.get(playerNumber);
 
@@ -256,7 +285,6 @@ public class Board extends EventProducer {
         a[0] = player.getPosition()[0];
         a[1] = player.getPosition()[1];
         Integer integer = CONTRAST_MAP.get(Arrays.toString(a));
-        System.out.println(integer);
 
         int newPosition = integer + steps - 1;
 
@@ -274,24 +302,21 @@ public class Board extends EventProducer {
         newPosition2D[1] = newY;
 
         Cell newCell = cells[newX][newY];
-
         if (newCell.hasObstacle()) {    // Use hasObstacle() method for readability
             // Decide whether to update the player's position based on applyEffect's outcome
-            if ((player.getScore() - 3) < 0) {
-                scoreBoard.deductScore(currentPlayer.getName(), player.getScore());
-            }
             scoreBoard.deductScore(currentPlayer.getName(), 3);
             System.out.println("Player " + playerNumber + " has encountered a " + newCell.getObstacle().getType().toString() + " pit!");
             System.out.println("Effect:" + newCell.getObstacle().printEffect());
 
             newCell.getObstacle().applyEffect(player, size, cells);
+            player.setScore(-3);
             // Decide whether to update the player's position based on the effect of applyEffect
-            // 调用ScoreBoardController中的upScore方法更新分数
         } else {
             // Update the player's position
             player.setPosition(newPosition2D);
             scoreBoard.addScore(currentPlayer.getName(), steps);
-            // 调用ScoreBoardController中的upScore方法更新分数
+            player.setScore(-1);
+
         }
 
         this.printBoard();
@@ -299,24 +324,42 @@ public class Board extends EventProducer {
         return player;
     }
 
-
+    /**
+     * Retrieves a specific cell from the board.
+     *
+     * @param x The x-coordinate of the cell.
+     * @param y The y-coordinate of the cell.
+     * @return The cell at the specified coordinates.
+     */
     public Cell getCell(int x, int y) {
         return cells[x][y];
     }
 
+    /**
+     * Retrieves a player by their player number.
+     *
+     * @param playerNumber The index of the player.
+     * @return The player with the specified index.
+     */
     public Player getPlayer(int playerNumber) {
         return players.get(playerNumber);
     }
 
-    public void removePlayer(String playerName) {
-        players.remove(playerName);
-    }
 
+    /**
+     * Represents a single cell on the game board.
+     */
     public class Cell {
         private Obstacle obstacle;
         int xPos;
         int yPos;
 
+        /**
+         * Constructs a new Cell with specified coordinates.
+         *
+         * @param x The x-coordinate of the cell.
+         * @param y The y-coordinate of the cell.
+         */
         public Cell(int x, int y) {
             this.xPos = x;
             this.yPos = y;
@@ -343,12 +386,20 @@ public class Board extends EventProducer {
         }
     }
 
-
+    /**
+     * Retrieves the list of players on the board.
+     *
+     * @return The list of players.
+     */
     public ArrayList<Player> getPlayers() {
         return players;
     }
 
-
+    /**
+     * Determines the next player to take their turn.
+     *
+     * @return The next player.
+     */
     public Player nextPlayer() {
         // if this function is being called for the first time, we need to set the current player
         if (this.currentPlayer == null) {
@@ -375,6 +426,11 @@ public class Board extends EventProducer {
         return this.currentPlayer;
     }
 
+    /**
+     * Provides a property to observe whether the game has been won.
+     *
+     * @return The game won property.
+     */
     public BooleanProperty gameWonProperty() {
         return gameWon;
     }
