@@ -62,10 +62,16 @@ public class ScoreBoard {
         }
     }
 
-    public void printScores() {
+    public String printScores() {
+        StringBuilder scores = new StringBuilder();
         System.out.println("Current Scores:");
         for (Player player : playerScores) {
             System.out.println(player.getName() + ": " + player.getScore() + " points");
+            scores.append(player.getName()).append(": ").append(player.getScore()).append(" points\n");
         }
+
+        return scores.toString();
     }
+
+
 }
