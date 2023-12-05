@@ -11,6 +11,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -20,6 +21,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class BoardController implements PropertyChangeListener {
+
+
     public ImageView player;
     public PlayerController playerController;
     public VBox diceComponent;
@@ -32,6 +35,9 @@ public class BoardController implements PropertyChangeListener {
 
     @FXML
     private GridPane gameBoardGridPane;
+
+    @FXML
+    private Text currentPlayer;
 
 
     // need to receive user input and pass it in here to create the players
@@ -79,6 +85,8 @@ public class BoardController implements PropertyChangeListener {
         Dice dice = Dice.getInstance();
         dice.addPropertyChangeListener(this);
 
+
+
         this.players = addPlayers();
 
         // both the 'virtual' board and the board in the UI represent player's position as an array of two integers
@@ -91,6 +99,10 @@ public class BoardController implements PropertyChangeListener {
         // 1. player rolls the dice, dice values are updated
         // 2. board.movePlayer updates player position
         // 3. pull those values out of the player, and use them to move the player in the UI
+
+        // add the listener after the board is initialized, so we don't get a null pointer exception
+        System.out.println("Adding BoardController as PropertyChangeListener to Board");
+        this.board.addPropertyChangeListener(this);
 
         this.board.gameWonProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal) {
@@ -109,7 +121,13 @@ public class BoardController implements PropertyChangeListener {
 
                 // FIXME: The player is hard-coded here. It should alternate.
                 try {
-                    this.board.movePlayer(board.nextPlayer().getIndex(), Dice.getInstance().getValue(), this.scoreBoard);
+                    Player nextPlayer = this.board.nextPlayer();
+                    currentPlayer.setText(nextPlayer.getName().toUpperCase() + "'S TURN");
+
+                    this.board.movePlayer(nextPlayer.getIndex(), Dice.getInstance().getValue(), this.scoreBoard);
+
+
+
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }

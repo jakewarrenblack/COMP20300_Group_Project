@@ -1,6 +1,7 @@
 package com.example.obstaclecourse.Models;
 
 import com.example.obstaclecourse.Controllers.ScoreBoardController;
+import com.example.obstaclecourse.Utils.EventProducer;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXMLLoader;
@@ -11,7 +12,7 @@ import java.io.IOException;
 import java.util.*;
 
 
-public class Board {
+public class Board extends EventProducer {
     private final Dice dice;
     private final int size;  // Board Size eg.10*10
     private final Cell[][] cells;
@@ -363,6 +364,9 @@ public class Board {
         if (nextPlayerIndex >= this.players.size()) {
             nextPlayerIndex = 0;
         }
+
+        // keep a reference to the old player for comparison
+        Player oldPlayer = this.currentPlayer;
 
         this.currentPlayer = this.players.get(nextPlayerIndex);
 

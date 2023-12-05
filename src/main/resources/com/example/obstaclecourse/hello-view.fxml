@@ -9,6 +9,7 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
 
 <HBox style="-fx-padding: 5px 0; -fx-background-color: black;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.obstaclecourse.Controllers.BoardController">
     <VBox>
@@ -361,6 +362,7 @@
                 <opaqueInsets>
                     <Insets />
                 </opaqueInsets>
+                <Text fx:id="currentPlayer" strokeType="OUTSIDE" strokeWidth="0.0" text="" />
                 <fx:include fx:id="diceComponent" source="dice-view.fxml" />
             </VBox>
         </children>

@@ -11,9 +11,6 @@ public class DiceController {
     @FXML
     private Text diceValues;
 
-    @FXML
-    private Text currentPlayer;
-
     public void roll(){
         this.dice.roll();
 
