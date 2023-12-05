@@ -426,6 +426,11 @@ public class Board extends EventProducer {
         return this.currentPlayer;
     }
 
+    // return cells
+    public Cell[][] getCells() {
+        return cells;
+    }
+
 
     /**
      * Provides a property to observe whether the game has been won.

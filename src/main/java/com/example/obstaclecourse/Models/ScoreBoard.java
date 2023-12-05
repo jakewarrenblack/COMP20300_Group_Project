@@ -91,4 +91,13 @@ public class ScoreBoard {
 
         return scores.toString();
     }
+
+    public Object getByPlayerName(String name) {
+        for (Player player : playerScores) {
+            if (player.getName().equals(name)) {
+                return player.getScore();
+            }
+        }
+        return null;
+    }
 }
